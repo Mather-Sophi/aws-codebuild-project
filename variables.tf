@@ -17,7 +17,7 @@ variable "ecr_name" {
 variable "codebuild_image" {
   type        = string
   description = "(Optional) The codebuild image to use"
-  default     = "aws/codebuild/amazonlinux2-x86_64-standard:1.0"
+  default     = "aws/codebuild/standard:3.0"
 }
 
 variable "build_compute_type" {
