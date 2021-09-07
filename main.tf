@@ -129,6 +129,32 @@ resource "aws_iam_role_policy" "codebuild_ecr" {
   policy = data.aws_iam_policy_document.codebuild_ecr[count.index].json
 }
 
+data "aws_iam_policy_document" "codebuild_secrets_manager" {
+  statement {
+    actions = [
+      "secretsmanager:GetSecretValue"
+    ]
+    resources = [
+      replace(var.cross_account_github_token_aws_secret_arn, "/-.{6}$/", "-??????")
+    ]
+  }
+
+  statement {
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = [
+      var.cross_account_github_token_aws_kms_cmk_arn
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "codebuild_secrets_manager" {
+  name   = "codebuild-secrets-manager-${var.name}"
+  role   = aws_iam_role.codebuild.id
+  policy = data.aws_iam_policy_document.codebuild_secrets_manager.json
+}
+
 resource "aws_codebuild_project" "project" {
   name          = var.name
   build_timeout = 60
@@ -168,6 +194,12 @@ resource "aws_codebuild_project" "project" {
         value = "/dockerhub/pass"
         type  = "PARAMETER_STORE"
       }
+    }
+
+    environment_variable {
+      name  = "DS_DEPLOY_GITHUB_TOKEN"
+      value = var.cross_account_github_token_aws_secret_arn
+      type = "SECRETS_MANAGER"
     }
   }
 

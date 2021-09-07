@@ -60,3 +60,15 @@ variable "tags" {
   description = "(Optional) A mapping of tags to assign to the resource"
   default     = {}
 }
+
+varaible "cross_account_github_token_aws_secret_arn" {
+  type = string
+  description = "Github token AWS secret ARN in the ds-ml-shared-svcs-prod AWS account"
+  default = "arn:aws:secretsmanager:us-east-1:662847230022:secret:ds-ml-shared-svcs-prod/ds_deploy_github_token-wFuICP"
+}
+
+varaible "cross_account_github_token_aws_kms_cmk_arn" {
+  type = string
+  description = "Github token AWS KMS customer managed key ARN in the ds-ml-shared-svcs-prod AWS account"
+  default = "arn:aws:kms:us-east-1:662847230022:key/c17f9e9c-2541-4855-893e-e6eed203d101"
+}
