@@ -197,7 +197,7 @@ resource "aws_codebuild_project" "project" {
     }
 
     environment_variable {
-      name  = "DS_DEPLOY_GITHUB_TOKEN"
+      name  = "DS_DEPLOY_GITHUB_TOKEN_SECRETS_ID"
       value = var.cross_account_github_token_aws_secret_arn
       type = "SECRETS_MANAGER"
     }
