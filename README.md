@@ -6,12 +6,14 @@ Creates a codebuild project and S3 artifact bucket to be used with codepipeline.
 
 ```hcl
 module "codebuild_project" {
-  source = "github.com/globeandmail/aws-codebuild-project?ref=1.4"
+  source = "github.com/globeandmail/aws-codebuild-project?ref=1.7"
 
   name        = var.name
   deploy_type = var.deploy_type
   ecr_name    = var.ecr_name
   tags        = var.tags
+  central_account_github_token_aws_secret_arn = var.central_account_github_token_aws_secret_arn
+  central_account_github_token_aws_kms_cmk_arn = var.central_account_github_token_aws_kms_cmk_arn
 }
 ```
 
@@ -28,8 +30,8 @@ module "codebuild_project" {
 | ecr\_name | \(Optional\) The name of the ECR repo. Required if var.deploy\_type is ecr or ecs | string | `"null"` | no |
 | logs\_retention\_in\_days | \(Optional\) Days to keep the cloudwatch logs for this codebuild project | number | `"14"` | no |
 | tags | \(Optional\) A mapping of tags to assign to the resource | map | `{}` | no |
-| cross\_account\_github\_token\_aws\_secret\_arn | \(Required\) (Required) The repo access Github token AWS secret ARN in the ds-ml-shared-svcs-prod AWS account | string | n/a | yes |
-| cross\_account\_github\_token\_aws\_kms\_cmk\_arn | \(Required\) The repo access Github token AWS KMS customer managed key ARN in the ds-ml-shared-svcs-prod AWS account | string | n/a | yes |
+| central\_account\_github\_token\_aws\_secret\_arn | \(Required\) (Required) The repo access Github token AWS secret ARN in the ds-ml-shared-svcs-prod AWS account | string | n/a | yes |
+| central\_account\_github\_token\_aws\_kms\_cmk\_arn | \(Required\) The repo access Github token AWS KMS customer managed key ARN in the ds-ml-shared-svcs-prod AWS account | string | n/a | yes |
 
 ## Outputs
 

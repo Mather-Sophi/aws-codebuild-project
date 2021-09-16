@@ -61,12 +61,12 @@ variable "tags" {
   default     = {}
 }
 
-variable "cross_account_github_token_aws_secret_arn" {
+variable "central_account_github_token_aws_secret_arn" {
   type = string
   description = "(Required) The repo access Github token AWS secret ARN in the ds-ml-shared-svcs-prod AWS account"
 }
 
-variable "cross_account_github_token_aws_kms_cmk_arn" {
+variable "central_account_github_token_aws_kms_cmk_arn" {
   type = string
   description = "(Required) The repo access Github token AWS KMS customer managed key ARN in the ds-ml-shared-svcs-prod AWS account"
 }
