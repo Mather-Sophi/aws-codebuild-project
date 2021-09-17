@@ -135,7 +135,7 @@ data "aws_iam_policy_document" "codebuild_secrets_manager" {
       "secretsmanager:GetSecretValue"
     ]
     resources = [
-      replace(var.cross_account_github_token_aws_secret_arn, "/-.{6}$/", "-??????")
+      replace(var.central_account_github_token_aws_secret_arn, "/-.{6}$/", "-??????")
     ]
   }
 
@@ -144,7 +144,7 @@ data "aws_iam_policy_document" "codebuild_secrets_manager" {
       "kms:Decrypt"
     ]
     resources = [
-      var.cross_account_github_token_aws_kms_cmk_arn
+      var.central_account_github_token_aws_kms_cmk_arn
     ]
   }
 }
@@ -198,7 +198,7 @@ resource "aws_codebuild_project" "project" {
 
     environment_variable {
       name  = "REPO_ACCESS_GITHUB_TOKEN_SECRETS_ID"
-      value = var.cross_account_github_token_aws_secret_arn
+      value = var.central_account_github_token_aws_secret_arn
       type = "SECRETS_MANAGER"
     }
   }
