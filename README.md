@@ -12,8 +12,8 @@ module "codebuild_project" {
   deploy_type = var.deploy_type
   ecr_name    = var.ecr_name
   tags        = var.tags
-  central_account_github_token_aws_secret_arn = central-account-github-token-aws-secret-arn
-  central_account_github_token_aws_kms_cmk_arn = central-account-github-token-aws-kms-cmk-arn
+  central_account_github_token_aws_secret_arn = var.central_account_github_token_aws_secret_arn
+  central_account_github_token_aws_kms_cmk_arn = var.central_account_github_token_aws_kms_cmk_arn
 }
 ```
 
