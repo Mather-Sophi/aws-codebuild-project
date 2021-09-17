@@ -30,7 +30,7 @@ module "codebuild_project" {
 | ecr\_name | \(Optional\) The name of the ECR repo. Required if var.deploy\_type is ecr or ecs | string | `"null"` | no |
 | logs\_retention\_in\_days | \(Optional\) Days to keep the cloudwatch logs for this codebuild project | number | `"14"` | no |
 | tags | \(Optional\) A mapping of tags to assign to the resource | map | `{}` | no |
-| central\_account\_github\_token\_aws\_secret\_arn | \(Required\) (Required) The repo access Github token AWS secret ARN in the ds-ml-shared-svcs-prod AWS account | string | n/a | yes |
+| central\_account\_github\_token\_aws\_secret\_arn | \(Required\) The repo access Github token AWS secret ARN in the ds-ml-shared-svcs-prod AWS account | string | n/a | yes |
 | central\_account\_github\_token\_aws\_kms\_cmk\_arn | \(Required\) The repo access Github token AWS KMS customer managed key ARN in the ds-ml-shared-svcs-prod AWS account | string | n/a | yes |
 
 ## Outputs
