@@ -6,14 +6,14 @@ Creates a codebuild project and S3 artifact bucket to be used with codepipeline.
 
 ```hcl
 module "codebuild_project" {
-  source = "github.com/globeandmail/aws-codebuild-project?ref=1.7"
+  source = "github.com/globeandmail/aws-codebuild-project?ref=1.8"
 
   name        = var.name
   deploy_type = var.deploy_type
   ecr_name    = var.ecr_name
   tags        = var.tags
-  central_account_github_token_aws_secret_arn = var.central_account_github_token_aws_secret_arn
-  central_account_github_token_aws_kms_cmk_arn = var.central_account_github_token_aws_kms_cmk_arn
+  svcs_account_github_token_aws_secret_arn = var.svcs_account_github_token_aws_secret_arn
+  svcs_account_github_token_aws_kms_cmk_arn = var.svcs_account_github_token_aws_kms_cmk_arn
 }
 ```
 
@@ -30,8 +30,10 @@ module "codebuild_project" {
 | ecr\_name | \(Optional\) The name of the ECR repo. Required if var.deploy\_type is ecr or ecs | string | `"null"` | no |
 | logs\_retention\_in\_days | \(Optional\) Days to keep the cloudwatch logs for this codebuild project | number | `"14"` | no |
 | tags | \(Optional\) A mapping of tags to assign to the resource | map | `{}` | no |
-| central\_account\_github\_token\_aws\_secret\_arn | \(Required\) The repo access Github token AWS secret ARN in the central AWS account | string | n/a | yes |
-| central\_account\_github\_token\_aws\_kms\_cmk\_arn | \(Required\) The repo access Github token AWS KMS customer managed key ARN in the central AWS account | string | n/a | yes |
+| use\_repo\_access\_github\_token | \(Optional\) Allow the AWS codebuild IAM role read access to the REPO\_ACCESS\_GITHUB\_TOKEN secrets manager secret in the shared service account.<br>Defaults to false. | `bool` | `false` | no |
+| svcs\_account\_github\_token\_aws\_secret\_arn | \(Optional\) The AWS secret ARN for the repo access Github token.<br>The secret is created in the shared service account.<br>Required if var.use\_repo\_access\_github\_token is true. | `string` | `null` | no |
+| svcs\_account\_github\_token\_aws\_kms\_cmk\_arn | \(Optional\)  The us-east-1 region AWS KMS customer managed key ARN for encrypting the repo access Github token AWS secret.<br>The key is created in the shared service account.<br>Required if var.use\_repo\_access\_github\_token is true. | `string` | `null` | no |
+| s3\_block\_public\_access | \(Optional\) Enable the S3 block public access setting for the artifact bucket. | `bool` | `false` | no |
 
 ## Outputs
 

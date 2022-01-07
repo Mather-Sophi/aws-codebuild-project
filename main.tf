@@ -22,6 +22,17 @@ resource "aws_s3_bucket" "artifact" {
   tags = var.tags
 }
 
+resource "aws_s3_bucket_public_access_block" "artifact" {
+  count  = var.s3_block_public_access ? 1 : 0
+  bucket = aws_s3_bucket.artifact.id
+
+  block_public_acls   = true
+  block_public_policy = true
+  ignore_public_acls  = true
+  restrict_public_buckets  = true
+}
+
+
 resource "aws_cloudwatch_log_group" "group" {
   name              = "/aws/codebuild/${var.name}"
   retention_in_days = var.logs_retention_in_days
@@ -130,12 +141,13 @@ resource "aws_iam_role_policy" "codebuild_ecr" {
 }
 
 data "aws_iam_policy_document" "codebuild_secrets_manager" {
+  count = var.use_repo_access_github_token ? 1 : 0
   statement {
     actions = [
       "secretsmanager:GetSecretValue"
     ]
     resources = [
-      replace(var.central_account_github_token_aws_secret_arn, "/-.{6}$/", "-??????")
+      replace(var.svcs_account_github_token_aws_secret_arn, "/-.{6}$/", "-??????")
     ]
   }
 
@@ -144,15 +156,16 @@ data "aws_iam_policy_document" "codebuild_secrets_manager" {
       "kms:Decrypt"
     ]
     resources = [
-      var.central_account_github_token_aws_kms_cmk_arn
+      var.svcs_account_github_token_aws_kms_cmk_arn
     ]
   }
 }
 
 resource "aws_iam_role_policy" "codebuild_secrets_manager" {
+  count  = var.use_repo_access_github_token ? 1 : 0
   name   = "codebuild-secrets-manager-${var.name}"
   role   = aws_iam_role.codebuild.id
-  policy = data.aws_iam_policy_document.codebuild_secrets_manager.json
+  policy = data.aws_iam_policy_document.codebuild_secrets_manager[0].json
 }
 
 resource "aws_codebuild_project" "project" {
@@ -196,10 +209,13 @@ resource "aws_codebuild_project" "project" {
       }
     }
 
-    environment_variable {
-      name  = "REPO_ACCESS_GITHUB_TOKEN_SECRETS_ID"
-      value = var.central_account_github_token_aws_secret_arn
-      type = "SECRETS_MANAGER"
+    dynamic "environment_variable" {
+      for_each = var.use_repo_access_github_token ? [1] : []
+      content {
+        name  = "REPO_ACCESS_GITHUB_TOKEN_SECRETS_ID"
+        value = var.svcs_account_github_token_aws_secret_arn
+        type = "SECRETS_MANAGER"
+      }
     }
   }
 
