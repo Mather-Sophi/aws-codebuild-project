@@ -10,16 +10,27 @@ locals {
 resource "aws_s3_bucket" "artifact" {
   # S3 bucket cannot be longer than 63 characters
   bucket = lower(substr("codepipeline-${local.aws_region}-${local.account_id}-${var.name}", 0, 63))
-  acl    = "private"
+  
+  tags = var.tags
+}
 
-  lifecycle_rule {
-    enabled = true
+resource "aws_s3_bucket_acl" "artifact" {
+  bucket = aws_s3_bucket.artifact.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "artifact" {
+  bucket = aws_s3_bucket.artifact.id
+
+  rule {
+    id = "expiration"
+
     expiration {
       days = 90
     }
-  }
 
-  tags = var.tags
+    status = "Enabled"
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "artifact" {
