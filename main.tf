@@ -199,6 +199,14 @@ resource "aws_codebuild_project" "project" {
     }
 
     dynamic "environment_variable" {
+      for_each = var.ecr_image_tag == null ? [] : [var.env_repo_name]
+      content {
+        name  = "IMAGE_TAG"
+        value = var.ecr_image_tag
+      }
+    }
+
+    dynamic "environment_variable" {
       for_each = var.use_docker_credentials == true ? [1] : []
       content {
         name  = "DOCKERHUB_USER"
