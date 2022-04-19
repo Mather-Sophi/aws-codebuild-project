@@ -9,8 +9,8 @@ locals {
 
 resource "aws_s3_bucket" "artifact" {
   # S3 bucket cannot be longer than 63 characters
-  bucket = lower(substr("codepipeline-${local.aws_region}-${local.account_id}-${var.name}", 0, 63))
-
+  bucket = lower(trimsuffix(substr("codepipeline-${local.aws_region}-${local.account_id}-${var.name}", 0, 63), "-"))
+  
   tags = var.tags
 }
 
