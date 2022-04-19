@@ -56,7 +56,7 @@ variable "privileged_mode" {
 
 }
 variable "tags" {
-  type        = map
+  type        = map(any)
   description = "(Optional) A mapping of tags to assign to the resource"
   default     = {}
 }
@@ -91,7 +91,7 @@ variable "svcs_account_github_token_aws_kms_cmk_arn" {
 }
 
 variable "s3_block_public_access" {
-  type = bool
+  type        = bool
   description = "(Optional) Enable the S3 block public access setting for the artifact bucket."
-  default = false
+  default     = false
 }

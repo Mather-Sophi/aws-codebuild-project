@@ -10,15 +10,7 @@ locals {
 resource "aws_s3_bucket" "artifact" {
   # S3 bucket cannot be longer than 63 characters
   bucket = lower(trimsuffix(substr("codepipeline-${local.aws_region}-${local.account_id}-${var.name}", 0, 63), "-"))
-  acl    = "private"
-
-  lifecycle_rule {
-    enabled = true
-    expiration {
-      days = 90
-    }
-  }
-
+  
   tags = var.tags
 }
 
@@ -26,12 +18,27 @@ resource "aws_s3_bucket_public_access_block" "artifact" {
   count  = var.s3_block_public_access ? 1 : 0
   bucket = aws_s3_bucket.artifact.id
 
-  block_public_acls   = true
-  block_public_policy = true
-  ignore_public_acls  = true
-  restrict_public_buckets  = true
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
+resource "aws_s3_bucket_acl" "artifact" {
+  bucket = aws_s3_bucket.artifact.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "artifact" {
+  bucket = aws_s3_bucket.artifact.id
+  rule {
+    id     = "expire"
+    status = "Enabled"
+    expiration {
+      days = 90
+    }
+  }
+}
 
 resource "aws_cloudwatch_log_group" "group" {
   name              = "/aws/codebuild/${var.name}"
@@ -214,7 +221,7 @@ resource "aws_codebuild_project" "project" {
       content {
         name  = "REPO_ACCESS_GITHUB_TOKEN_SECRETS_ID"
         value = var.svcs_account_github_token_aws_secret_arn
-        type = "SECRETS_MANAGER"
+        type  = "SECRETS_MANAGER"
       }
     }
   }
