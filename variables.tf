@@ -14,6 +14,12 @@ variable "ecr_name" {
   default     = null
 }
 
+variable "ecr_image_tag" {
+  type        = string
+  description = "The tag of the ECR image. Required if var.deploy_type is ecr or ecs"
+  default     = "latest"
+}
+
 variable "codebuild_image" {
   type        = string
   description = "(Optional) The codebuild image to use"
