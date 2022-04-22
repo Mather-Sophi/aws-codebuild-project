@@ -142,14 +142,28 @@ resource "aws_iam_role_policy" "codebuild_ecr" {
 
 data "aws_iam_policy_document" "codebuild_secrets_manager" {
   count = var.use_repo_access_github_token || var.use_sysdig_api_token ? 1 : 0
-  statement {
-    actions = [
-      "secretsmanager:GetSecretValue"
-    ]
-    resources = [
-      replace(var.svcs_account_github_token_aws_secret_arn, "/-.{6}$/", "-??????"),
-      replace(var.svcs_account_sysdig_api_token_aws_secret_arn, "/-.{6}$/", "-??????")
-    ]
+  dynamic "statement" {
+    for_each = var.use_repo_access_github_token == true ? [1] : []
+    content {
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        replace(var.svcs_account_github_token_aws_secret_arn, "/-.{6}$/", "-??????")
+      ]
+    }
+  }
+
+  dynamic "statement" {
+    for_each = var.use_sysdig_api_token == true ? [1] : []
+    content {
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        replace(var.svcs_account_sysdig_api_token_aws_secret_arn, "/-.{6}$/", "-??????")
+      ]
+    }
   }
 
   statement {
