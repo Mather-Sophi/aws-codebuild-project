@@ -222,7 +222,7 @@ resource "aws_codebuild_project" "project" {
     dynamic "environment_variable" {
       for_each = var.use_sysdig_api_token ? [1] : []
       content {
-        name  = "SYSDIG_API_TOKEN"
+        name  = "SYSDIG_API_TOKEN_SECRETS_ID"
         value = var.svcs_account_sysdig_api_token_aws_secret_arn
         type = "SECRETS_MANAGER"
       }

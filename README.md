@@ -6,14 +6,21 @@ Creates a codebuild project and S3 artifact bucket to be used with codepipeline.
 
 ```hcl
 module "codebuild_project" {
-  source = "github.com/globeandmail/aws-codebuild-project?ref=2.0"
+  source = "github.com/globeandmail/aws-codebuild-project?ref=2.1"
 
-  name        = var.name
-  deploy_type = var.deploy_type
-  ecr_name    = var.ecr_name
-  tags        = var.tags
-  svcs_account_github_token_aws_secret_arn = var.svcs_account_github_token_aws_secret_arn
-  svcs_account_aws_kms_cmk_arn = var.svcs_account_aws_kms_cmk_arn
+  name                                         = var.name
+  deploy_type                                  = var.deploy_type
+  ecr_name                                     = var.ecr_name
+  build_compute_type                           = var.build_compute_type
+  use_docker_credentials                       = var.use_docker_credentials
+  buildspec                                    = var.buildspec
+  tags                                         = var.tags
+  use_repo_access_github_token                 = var.use_repo_access_github_token
+  svcs_account_github_token_aws_secret_arn     = var.svcs_account_github_token_aws_secret_arn
+  svcs_account_aws_kms_cmk_arn                 = var.svcs_account_aws_kms_cmk_arn
+  s3_block_public_access                       = var.s3_block_public_access
+  use_sysdig_api_token                         = var.use_sysdig_api_token
+  svcs_account_sysdig_api_token_aws_secret_arn = var.svcs_account_sysdig_api_token_aws_secret_arn
 }
 ```
 
