@@ -17,6 +17,7 @@ module "codebuild_project" {
   tags                                         = var.tags
   use_repo_access_github_token                 = var.use_repo_access_github_token
   svcs_account_github_token_aws_secret_arn     = var.svcs_account_github_token_aws_secret_arn
+  svcs_account_github_token_aws_kms_cmk_arn    = var.svcs_account_github_token_aws_kms_cmk_arn
   svcs_account_aws_kms_cmk_arn                 = var.svcs_account_aws_kms_cmk_arn
   s3_block_public_access                       = var.s3_block_public_access
   use_sysdig_api_token                         = var.use_sysdig_api_token
