@@ -24,9 +24,18 @@ resource "aws_s3_bucket_public_access_block" "artifact" {
   restrict_public_buckets = true
 }
 
+resource "aws_s3_bucket_ownership_controls" "artifact" {
+  bucket = aws_s3_bucket.artifact.id
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
 resource "aws_s3_bucket_acl" "artifact" {
   bucket = aws_s3_bucket.artifact.id
   acl    = "private"
+  depends_on = [aws_s3_bucket_ownership_controls.artifact]
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "artifact" {
