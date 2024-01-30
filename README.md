@@ -6,7 +6,7 @@ Creates a codebuild project and S3 artifact bucket to be used with codepipeline.
 
 ```hcl
 module "codebuild_project" {
-  source = "github.com/globeandmail/aws-codebuild-project?ref=2.1"
+  source = "github.com/globeandmail/aws-codebuild-project?ref=2.2"
 
   name                                         = var.name
   deploy_type                                  = var.deploy_type
